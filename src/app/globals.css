@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────
+   DESIGN TOKENS
+───────────────────────────────────── */
+:root {
+  --bg:           #05040f;
+  --bg2:          #080717;
+  --surface:      rgba(255,255,255,0.03);
+  --surface2:     rgba(255,255,255,0.06);
+  --border:       rgba(255,255,255,0.08);
+  --border2:      rgba(140,100,255,0.3);
+  --neon:         #7c3aed;
+  --neon2:        #4f46e5;
+  --neon3:        #a78bfa;
+  --neon-glow:    rgba(124,58,237,0.4);
+  --neon-soft:    rgba(124,58,237,0.12);
+  --text:         #f0eeff;
+  --text2:        rgba(240,238,255,0.6);
+  --text3:        rgba(240,238,255,0.35);
+  --accent:       #c4b5fd;
+  --blue:         #6366f1;
+  /* UPDATED FONT VARIABLE */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+}
+
+/* ─────────────────────────────────────
+   BASE RESET
+───────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--neon) var(--bg);
+}
+
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 10px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Noise grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+
+/* ─────────────────────────────────────
+   TYPOGRAPHY UTILITIES
+───────────────────────────────────── */
+.font-display { font-family: var(--font-display); }
+
+.gradient-text {
+  background: linear-gradient(135deg, #c4b5fd 0%, #818cf8 50%, #6366f1 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  
+  display: inline-flex !important;
+  align-items: center;
+
+  /* 
+     1. Equalized padding: 
+     Using the same value for top and bottom prevents the "box" 
+     from being weighted heavily in one direction.
+  */
+  padding: 0.1em 0.05em; 
+  
+  /* 
+     2. Manual Baseline Nudge:
+     Instead of 'middle', we use a % or em value. 
+     A negative value moves it UP. A positive value moves it DOWN.
+     Adjust -0.05em to -0.02em if it goes too high.
+  */
+  vertical-align: -0.05em;
+
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+h1 .gradient-text, 
+h2 .gradient-text {
+  /* 
+     Ensure the line-height doesn't fight the flex centering.
+     'normal' or '1.1' is usually the sweet spot for Space Grotesk.
+  */
+  line-height: 1.1; 
+  display: inline-flex !important;
+  
+  /* 
+     Matches the nudge from above. 
+     If it still looks "fallen," try -0.02em here.
+  */
+  vertical-align: -0.02em; 
+}
+
+/* ─────────────────────────────────────
+   SECTION DIVIDER
+───────────────────────────────────── */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+}
+
+/* ─────────────────────────────────────
+   CARD STYLES
+───────────────────────────────────── */
+.glass-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: border-color 0.3s, background 0.3s;
+}
+.glass-card:hover {
+  border-color: var(--border2);
+  background: var(--surface2);
+}
+
+/* ─────────────────────────────────────
+   ANIMATIONS
+───────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50%       { transform: translateY(-30px) scale(1.05); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.7); }
+}
+
+@keyframes scroll-line {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  50%  { transform: scaleY(1); transform-origin: top; }
+  51%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* ─────────────────────────────────────
+   REUSABLE ANIMATION CLASSES
+───────────────────────────────────── */
+.animate-fade-up         { animation: fadeUp 0.8s ease both; }
+.animate-float           { animation: float 8s ease-in-out infinite; }
+.animate-pulse-dot       { animation: pulse-dot 2s ease infinite; }
+.animate-scroll-line     { animation: scroll-line 2s ease infinite; }
+
+/* delay helpers */
+.anim-delay-100 { animation-delay: 100ms; }
+.anim-delay-200 { animation-delay: 200ms; }
+.anim-delay-300 { animation-delay: 300ms; }
+.anim-delay-400 { animation-delay: 400ms; }
+.anim-delay-500 { animation-delay: 500ms; }
+.anim-delay-800 { animation-delay: 800ms; }
+
+/* ─────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 100ms; }
+.reveal-delay-2 { transition-delay: 200ms; }
+.reveal-delay-3 { transition-delay: 300ms; }
+
+/* ─────────────────────────────────────
+   NEON GLOW BUTTON
+───────────────────────────────────── */
+.btn-neon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--neon), var(--neon2));
+  color: white;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 30px var(--neon-glow);
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-decoration: none;
+}
+.btn-neon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 50px rgba(124,58,237,0.6);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
+  text-decoration: none;
+}
+.btn-outline:hover {
+  background: var(--neon-soft);
+  border-color: var(--neon3);
+}
