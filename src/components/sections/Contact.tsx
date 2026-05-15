@@ -6,8 +6,8 @@ import GradientText from "@/components/ui/GradientText";
 import { personal } from "@/data/portfolio";
 
 const CONTACT_LINKS = [
-  { icon: "✉️", label: "Email",    value: personal.email,    href: `mailto:${personal.email}` },
-  { icon: "📞", label: "Phone",    value: personal.phone,    href: `tel:${personal.phone.replace(/-/g,"")}` },
+  { icon: "✉️", label: "Email",    value: personal.email,    href: undefined },
+  { icon: "📞", label: "Phone",    value: personal.phone,    href: undefined },
   { icon: "🔗", label: "LinkedIn", value: personal.linkedin, href: personal.linkedinUrl },
   { icon: "💻", label: "GitHub",   value: personal.github,   href: personal.githubUrl },
 ];
@@ -67,53 +67,65 @@ export default function Contact() {
             </p>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {CONTACT_LINKS.map(({ icon, label, value, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target={href.startsWith("http") ? "_blank" : undefined}
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "flex", alignItems: "center", gap: 14,
-                    padding: "1rem 1.2rem",
-                    background: "var(--surface)",
-                    border: "1px solid var(--border)",
-                    borderRadius: 12, textDecoration: "none",
-                    transition: "border-color 0.3s, background 0.3s, transform 0.3s",
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLAnchorElement;
-                    el.style.borderColor = "var(--border2)";
-                    el.style.background = "var(--neon-soft)";
-                    el.style.transform = "translateX(6px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLAnchorElement;
-                    el.style.borderColor = "var(--border)";
-                    el.style.background = "var(--surface)";
-                    el.style.transform = "translateX(0)";
-                  }}
-                >
-                  <div
-                    style={{
+              {CONTACT_LINKS.map(({ icon, label, value, href }) => {
+                const cardStyle: React.CSSProperties = {
+                  display: "flex", alignItems: "center", gap: 14,
+                  padding: "1rem 1.2rem",
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 12, textDecoration: "none",
+                  transition: "border-color 0.3s, background 0.3s, transform 0.3s",
+                  cursor: href ? "pointer" : "default",
+                };
+
+                const handleEnter = (e: React.MouseEvent<HTMLElement>) => {
+                  if (!href) return;
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.borderColor = "var(--border2)";
+                  el.style.background = "var(--neon-soft)";
+                  el.style.transform = "translateX(6px)";
+                };
+
+                const handleLeave = (e: React.MouseEvent<HTMLElement>) => {
+                  if (!href) return;
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.borderColor = "var(--border)";
+                  el.style.background = "var(--surface)";
+                  el.style.transform = "translateX(0)";
+                };
+
+                const inner = (
+                  <>
+                    <div style={{
                       width: 38, height: 38, borderRadius: 8,
                       background: "linear-gradient(135deg, var(--neon), var(--neon2))",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       fontSize: "1.1rem", flexShrink: 0,
-                    }}
-                  >
-                    {icon}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: "0.72rem", color: "var(--text3)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
-                      {label}
+                    }}>
+                      {icon}
                     </div>
-                    <div style={{ fontSize: "0.9rem", color: "var(--text)", fontWeight: 500 }}>
-                      {value}
+                    <div>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text3)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                        {label}
+                      </div>
+                      <div style={{ fontSize: "0.9rem", color: "var(--text)", fontWeight: 500 }}>
+                        {value}
+                      </div>
                     </div>
+                  </>
+                );
+
+                return href ? (
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer"
+                    style={cardStyle} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+                    {inner}
+                  </a>
+                ) : (
+                  <div key={label} style={cardStyle} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+                    {inner}
                   </div>
-                </a>
-              ))}
+                );
+              })}
             </div>
           </div>
 

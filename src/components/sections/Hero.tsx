@@ -6,6 +6,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      className="hero-section"
       style={{
         minHeight: "100vh",
         display: "flex",
@@ -100,15 +101,12 @@ export default function Hero() {
 
       {/* ── Stats (desktop) ── */}
       <div
-        className="animate-fade-up anim-delay-500"
-        style={{
-          position: "absolute", right: "3rem", bottom: "5rem",
-          display: "flex", flexDirection: "column", gap: "1.5rem",
-        }}
+        className="hero-stats animate-fade-up anim-delay-500"
       >
         {stats.map((s) => (
-          <div key={s.label} style={{ textAlign: "right" }}>
+          <div key={s.label} style={{ textAlign: "center" }}>
             <div
+              className="stat-num"
               style={{
                 fontFamily: "var(--font-display)",
                 fontSize: "2.5rem", fontWeight: 800,
@@ -118,6 +116,7 @@ export default function Hero() {
               {s.num}
             </div>
             <div
+              className="stat-label"
               style={{
                 fontSize: "0.75rem", color: "var(--text3)",
                 textTransform: "uppercase", letterSpacing: "0.1em",

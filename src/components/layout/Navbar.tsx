@@ -75,7 +75,7 @@ export default function Navbar() {
       {/* Desktop links */}
       <ul
         style={{
-          display: "flex", gap: "2rem", listStyle: "none",
+          gap: "2rem", listStyle: "none",
         }}
         className="hidden md:flex"
       >
