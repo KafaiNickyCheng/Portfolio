@@ -29,7 +29,7 @@ ENV NODE_ENV=production
 # Copy standalone build
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
-COPY --from=build /app/public ./public          # ← add this line
+COPY --from=build /app/public ./public
 
 EXPOSE 3000
 ENV PORT=3000
