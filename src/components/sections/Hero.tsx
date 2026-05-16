@@ -98,6 +98,14 @@ export default function Hero() {
         >
           <a href="/projects" onClick={(e) => { e.preventDefault(); document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" }); }} className="btn-neon">View My Work →</a>
           <a href="/contact" onClick={(e) => { e.preventDefault(); document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }); }} className="btn-outline">Get In Touch</a>
+          <a
+            href="/cv.pdf"
+            download="Kafai_Cheng_CV.pdf"
+            className="btn-outline"
+            style={{ gap: 8 }}
+          >
+            ↓ Download My CV
+          </a>
         </div>
       </div>
 

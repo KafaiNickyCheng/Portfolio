@@ -18,9 +18,9 @@ export const personal = {
   email: "kafainickycheng@gmail.com",
   phone: "098-720-3328",
   location: "Samut Sakhon, Thailand",
-  linkedin: "linkedin.com/in/kafaicheng",
+  linkedin: "linkedin.com/in/ka-fai-cheng",
   github: "github.com/KafaiNickyCheng",
-  linkedinUrl: "https://linkedin.com/in/kafaicheng",
+  linkedinUrl: "https://linkedin.com/in/ka-fai-cheng",
   githubUrl: "https://github.com/KafaiNickyCheng",
 };
 
