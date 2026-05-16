@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { personal } from "@/data/portfolio";
+import ThemeToggle from "@/components/ui/ThemeContext"
 
 const NAV_LINKS = [
   { label: "About",      id: "about" },
@@ -43,7 +44,6 @@ export default function Navbar() {
       observers.push(obs);
     });
 
-    // Also observe hero section to clean URL back to /
     const hero = document.getElementById("hero");
     if (hero) {
       const heroObs = new IntersectionObserver(
@@ -74,7 +74,9 @@ export default function Navbar() {
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "1.25rem 3rem",
-        background: scrolled ? "rgba(5,4,15,0.95)" : "rgba(5,4,15,0.7)",
+        background: scrolled
+          ? "color-mix(in srgb, var(--bg) 97%, transparent)"
+          : "color-mix(in srgb, var(--bg) 80%, transparent)",
         backdropFilter: "blur(20px)",
         borderBottom: "1px solid var(--border)",
         transition: "background 0.3s",
@@ -94,46 +96,53 @@ export default function Navbar() {
         {personal.initials}.
       </a>
 
-      {/* Desktop links */}
-      <ul style={{ gap: "2rem", listStyle: "none" }} className="hidden md:flex">
-        {NAV_LINKS.map(({ label, id }) => (
-          <li key={id}>
-            <a
-              href={`/${id}`}
-              onClick={(e) => { e.preventDefault(); scrollTo(id); }}
-              style={{
-                color: activeSection === id ? "var(--accent)" : "var(--text2)",
-                textDecoration: "none",
-                fontSize: "0.85rem", fontWeight: 400,
-                letterSpacing: "0.08em", textTransform: "uppercase",
-                transition: "color 0.2s", cursor: "pointer",
-              }}
-            >
-              {label}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {/* Desktop links + theme toggle */}
+      <div className="hidden md:flex" style={{ alignItems: "center", gap: "2rem" }}>
+        <ul style={{ gap: "2rem", listStyle: "none", display: "flex", alignItems: "center" }}>
+          {NAV_LINKS.map(({ label, id }) => (
+            <li key={id}>
+              <a
+                href={`/${id}`}
+                onClick={(e) => { e.preventDefault(); scrollTo(id); }}
+                style={{
+                  color: activeSection === id ? "var(--accent)" : "var(--text2)",
+                  textDecoration: "none",
+                  fontSize: "0.85rem", fontWeight: 400,
+                  letterSpacing: "0.08em", textTransform: "uppercase",
+                  transition: "color 0.2s", cursor: "pointer",
+                }}
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <ThemeToggle />
+      </div>
 
-      {/* Mobile hamburger */}
-      <button
-        onClick={() => setMenuOpen((o) => !o)}
-        className="md:hidden"
-        style={{
-          background: "none", border: "none", cursor: "pointer",
-          color: "var(--text)", fontSize: "1.4rem",
-        }}
-        aria-label="Toggle menu"
+      {/* Mobile: theme toggle + hamburger */}
+      <div
+        className="mobile-nav-controls"
       >
-        {menuOpen ? "✕" : "☰"}
-      </button>
+        <ThemeToggle />
+        <button
+          onClick={() => setMenuOpen((o) => !o)}
+          style={{
+            background: "none", border: "none", cursor: "pointer",
+            color: "var(--text)", fontSize: "1.4rem",
+          }}
+          aria-label="Toggle menu"
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
+      </div>
 
       {/* Mobile dropdown */}
       {menuOpen && (
         <div
           style={{
             position: "absolute", top: "100%", left: 0, right: 0,
-            background: "rgba(5,4,15,0.98)",
+            background: "color-mix(in srgb, var(--bg) 98%, transparent)",
             borderBottom: "1px solid var(--border)",
             padding: "1.5rem 2rem",
             display: "flex", flexDirection: "column", gap: "1.2rem",

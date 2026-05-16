@@ -30,6 +30,43 @@
 }
 
 /* ─────────────────────────────────────
+   LIGHT THEME OVERRIDES
+───────────────────────────────────── */
+[data-theme="light"] {
+  --bg:        #f8f7ff;
+  --bg2:       #f0eeff;
+  --surface:   rgba(124,58,237,0.05);
+  --surface2:  rgba(124,58,237,0.1);
+  --border:    rgba(124,58,237,0.15);
+  --border2:   rgba(124,58,237,0.4);
+  --neon:      #7c3aed;
+  --neon2:     #4f46e5;
+  --neon3:     #6d28d9;
+  --neon-glow: rgba(124,58,237,0.25);
+  --neon-soft: rgba(124,58,237,0.08);
+  --text:      #1a1040;
+  --text2:     rgba(26,16,64,0.65);
+  --text3:     rgba(26,16,64,0.4);
+  --accent:    #6d28d9;
+  --blue:      #4f46e5;
+}
+
+/* Light mode scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track { background: var(--bg); }
+[data-theme="light"] body { background: var(--bg); color: var(--text); }
+
+/* Light mode gradient text stays the same purple */
+[data-theme="light"] .gradient-text {
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #6366f1 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* Light mode noise overlay — reduce opacity */
+[data-theme="light"] body::before { opacity: 0.15; }
+
+/* ─────────────────────────────────────
    BASE RESET
 ───────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -289,4 +326,19 @@ h2 .gradient-text {
 .btn-outline:hover {
   background: var(--neon-soft);
   border-color: var(--neon3);
+}
+
+/* ─────────────────────────────────────
+   MOBILE NAV
+───────────────────────────────────── */
+.mobile-nav-controls {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (max-width: 767px) {
+  .mobile-nav-controls {
+    display: flex;
+  }
 }
