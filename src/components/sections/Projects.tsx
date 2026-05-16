@@ -5,6 +5,33 @@ import GradientText from "@/components/ui/GradientText";
 import { projects } from "@/data/portfolio";
 
 export default function Projects() {
+  // ── Mouse-tracking handler ─────────────────────────────────────────────────
+  // On every mousemove we update two CSS custom properties on the card element.
+  // The ::before pseudo-element (injected via globals.css) reads these to
+  // position its radial-gradient center exactly under the cursor.
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el   = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    el.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  };
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    el.style.borderColor = "var(--border2)";
+    el.style.transform   = "translateY(-4px)";
+    el.style.boxShadow   = "0 20px 60px rgba(124,58,237,0.15)";
+    el.style.setProperty("--spotlight-opacity", "1");
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    el.style.borderColor = "var(--border)";
+    el.style.transform   = "translateY(0)";
+    el.style.boxShadow   = "none";
+    el.style.setProperty("--spotlight-opacity", "0");
+  };
+
   return (
     <section id="projects" style={{ background: "var(--bg2)", position: "relative", zIndex: 1 }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "7rem 3rem" }}>
@@ -25,8 +52,13 @@ export default function Projects() {
           {projects.map((project, i) => (
             <div
               key={project.num}
-              className={`reveal reveal-delay-${(i % 3) + 1}`}
+              className={`reveal reveal-delay-${(i % 3) + 1} project-card`}
               style={{
+                // Seed the CSS vars so the gradient is off-screen before
+                // the user has moved their mouse over this card
+                "--mx": "50%",
+                "--my": "50%",
+                "--spotlight-opacity": "0",
                 background: "var(--surface)",
                 border: "1px solid var(--border)",
                 borderRadius: 16,
@@ -37,36 +69,12 @@ export default function Projects() {
                 flexDirection: "column",
                 transition: "border-color 0.35s, transform 0.35s, box-shadow 0.35s",
                 cursor: "default",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLDivElement;
-                el.style.borderColor = "var(--border2)";
-                el.style.transform = "translateY(-4px)";
-                el.style.boxShadow = "0 20px 60px rgba(124,58,237,0.15)";
-                const glow = el.querySelector(".card-glow") as HTMLElement;
-                if (glow) glow.style.opacity = "1";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLDivElement;
-                el.style.borderColor = "var(--border)";
-                el.style.transform = "translateY(0)";
-                el.style.boxShadow = "none";
-                const glow = el.querySelector(".card-glow") as HTMLElement;
-                if (glow) glow.style.opacity = "0";
-              }}
+              } as React.CSSProperties}
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
-              {/* Radial glow on hover */}
-              <div
-                className="card-glow"
-                style={{
-                  position: "absolute", inset: 0,
-                  background: "radial-gradient(circle at top right, var(--neon-soft), transparent 60%)",
-                  opacity: 0, transition: "opacity 0.3s",
-                  pointerEvents: "none",
-                }}
-              />
-
-              {/* Card content */}
+              {/* Card content — sits above the ::before spotlight layer */}
               <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", flex: 1 }}>
                 <div
                   style={{

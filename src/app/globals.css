@@ -342,3 +342,24 @@ h2 .gradient-text {
     display: flex;
   }
 }
+
+/* ─────────────────────────────────────
+   PROJECT CARD — cursor-tracking spotlight
+   --mx / --my are set in JS (Projects.tsx onMouseMove).
+   --spotlight-opacity fades in/out on enter/leave.
+───────────────────────────────────── */
+.project-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    300px circle at var(--mx) var(--my),
+    rgba(124, 58, 237, 0.13),
+    transparent 70%
+  );
+  opacity: var(--spotlight-opacity);
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}

@@ -19,9 +19,9 @@ export const personal = {
   phone: "098-720-3328",
   location: "Samut Sakhon, Thailand",
   linkedin: "linkedin.com/in/kafaicheng",
-  github: "github.com/kafaicheng",
+  github: "github.com/KafaiNickyCheng",
   linkedinUrl: "https://linkedin.com/in/kafaicheng",
-  githubUrl: "https://github.com/kafaicheng",
+  githubUrl: "https://github.com/KafaiNickyCheng",
 };
 
 export const stats = [
