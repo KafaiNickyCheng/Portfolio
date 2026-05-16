@@ -1,3 +1,5 @@
+"use client";
+
 import ParallaxOrbs from "@/components/ui/ParallaxOrbs";
 import GradientText from "@/components/ui/GradientText";
 import { personal, stats } from "@/data/portfolio";
@@ -94,8 +96,8 @@ export default function Hero() {
           className="animate-fade-up anim-delay-400"
           style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}
         >
-          <a href="#projects" className="btn-neon">View My Work →</a>
-          <a href="#contact" className="btn-outline">Get In Touch</a>
+          <a href="/projects" onClick={(e) => { e.preventDefault(); document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" }); }} className="btn-neon">View My Work →</a>
+          <a href="/contact" onClick={(e) => { e.preventDefault(); document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }); }} className="btn-outline">Get In Touch</a>
         </div>
       </div>
 

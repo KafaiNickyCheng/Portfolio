@@ -1,41 +1,40 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { personal } from "@/data/portfolio";
 
 const NAV_LINKS = [
-  { label: "About",      href: "#about" },
-  { label: "Skills",     href: "#skills" },
-  { label: "Projects",   href: "#projects" },
-  { label: "Experience", href: "#experience" },
-  { label: "Contact",    href: "#contact" },
+  { label: "About",      id: "about" },
+  { label: "Skills",     id: "skills" },
+  { label: "Projects",   id: "projects" },
+  { label: "Experience", id: "experience" },
+  { label: "Contact",    id: "contact" },
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled]     = useState(false);
-  const [activeSection, setActive]  = useState("");
-  const [menuOpen, setMenuOpen]     = useState(false);
+  const [scrolled, setScrolled]    = useState(false);
+  const [activeSection, setActive] = useState("");
+  const [menuOpen, setMenuOpen]    = useState(false);
 
+  // Scroll listener
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Highlight active section via IntersectionObserver
+  // Active section tracker
   useEffect(() => {
-    const ids = NAV_LINKS.map((l) => l.href.replace("#", ""));
     const observers: IntersectionObserver[] = [];
 
-    ids.forEach((id) => {
+    NAV_LINKS.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (!el) return;
       const obs = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
             setActive(id);
-            window.history.replaceState(null, "", `#${id}`);
+            window.history.replaceState(null, "", `/${id}`);
           }
         },
         { threshold: 0.4 }
@@ -44,8 +43,30 @@ export default function Navbar() {
       observers.push(obs);
     });
 
+    // Also observe hero section to clean URL back to /
+    const hero = document.getElementById("hero");
+    if (hero) {
+      const heroObs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActive("");
+            window.history.replaceState(null, "", "/");
+          }
+        },
+        { threshold: 0.4 }
+      );
+      heroObs.observe(hero);
+      observers.push(heroObs);
+    }
+
     return () => observers.forEach((o) => o.disconnect());
   }, []);
+
+  // Smooth scroll helper
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <nav
@@ -60,44 +81,38 @@ export default function Navbar() {
       }}
     >
       {/* Logo */}
-      <Link
-        href="#hero"
+      <a
+        href="/"
+        onClick={(e) => { e.preventDefault(); scrollTo("hero"); }}
         style={{
           fontFamily: "var(--font-display)",
           fontSize: "1.15rem", fontWeight: 700,
           color: "var(--accent)", textDecoration: "none",
-          letterSpacing: "0.05em",
+          letterSpacing: "0.05em", cursor: "pointer",
         }}
       >
         {personal.initials}.
-      </Link>
+      </a>
 
       {/* Desktop links */}
-      <ul
-        style={{
-          gap: "2rem", listStyle: "none",
-        }}
-        className="hidden md:flex"
-      >
-        {NAV_LINKS.map(({ label, href }) => {
-          const id = href.replace("#", "");
-          return (
-            <li key={href}>
-              <a
-                href={href}
-                style={{
-                  color: activeSection === id ? "var(--accent)" : "var(--text2)",
-                  textDecoration: "none",
-                  fontSize: "0.85rem", fontWeight: 400,
-                  letterSpacing: "0.08em", textTransform: "uppercase",
-                  transition: "color 0.2s",
-                }}
-              >
-                {label}
-              </a>
-            </li>
-          );
-        })}
+      <ul style={{ gap: "2rem", listStyle: "none" }} className="hidden md:flex">
+        {NAV_LINKS.map(({ label, id }) => (
+          <li key={id}>
+            <a
+              href={`/${id}`}
+              onClick={(e) => { e.preventDefault(); scrollTo(id); }}
+              style={{
+                color: activeSection === id ? "var(--accent)" : "var(--text2)",
+                textDecoration: "none",
+                fontSize: "0.85rem", fontWeight: 400,
+                letterSpacing: "0.08em", textTransform: "uppercase",
+                transition: "color 0.2s", cursor: "pointer",
+              }}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
       </ul>
 
       {/* Mobile hamburger */}
@@ -124,11 +139,15 @@ export default function Navbar() {
             display: "flex", flexDirection: "column", gap: "1.2rem",
           }}
         >
-          {NAV_LINKS.map(({ label, href }) => (
+          {NAV_LINKS.map(({ label, id }) => (
             <a
-              key={href}
-              href={href}
-              onClick={() => setMenuOpen(false)}
+              key={id}
+              href={`/${id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo(id);
+                setMenuOpen(false);
+              }}
               style={{
                 color: "var(--text2)", textDecoration: "none",
                 fontSize: "1rem", letterSpacing: "0.08em", textTransform: "uppercase",
